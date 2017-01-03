@@ -86,7 +86,7 @@ function registerApp(req, res) {
   else {
     // search db for key
     db.setKey(key, function(id) {
-      res.status(201).send(`Registered app. Unique ID is `+id);
+      res.status(201).send(`Registered app. Unique ID is: <strong>`+id+"</strong> <br><br> Use it like so: <br> <pre>![https://www.pivotaltracker.com/story/show/123456](https://www.pivotaltrackerbadge.com/"+id+"/story/show/123456)</pre>");
     });
   }
 }
@@ -103,6 +103,7 @@ cluster(function(worker) {
   const app = express();
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use(express.static(__dirname + '/public'));
 
   app.get('/', function(req, res) {
     new Badge()
@@ -113,7 +114,7 @@ cluster(function(worker) {
   });
 
   app.get('/register', function(req, res) {
-    res.send('Only support POST and DELETE');
+    res.sendFile(__dirname + '/public/register.html');
   })
   app.post('/register', registerApp);
   app.delete('/register/:id', unregisterApp);
