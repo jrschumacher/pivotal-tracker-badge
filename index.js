@@ -86,7 +86,7 @@ function registerApp(req, res) {
   else {
     // search db for key
     db.setKey(key, function(id) {
-      res.status(201).send(`Registered app. Unique ID is: <strong>`+id+"</strong> <br><br> Use it like so: <br> <pre>![https://www.pivotaltracker.com/story/show/123456](https://www.pivotaltrackerbadge.com/"+id+"/story/show/123456)</pre>");
+      res.status(201).send(id);
     });
   }
 }
@@ -106,6 +106,10 @@ cluster(function(worker) {
   app.use(express.static(__dirname + '/public'));
 
   app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/public/index.html');
+  });
+
+  app.get('/pt-badge', function(req, res) {
     new Badge()
       .setText('pivotal tracker', 'badge')
       .build(function(svg, err) {

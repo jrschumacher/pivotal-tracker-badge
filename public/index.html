@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Pivotal Tracker Badge</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row">
+        <div class="one-half column" style="margin-top: 15%">
+          <img src="/pt-badge" width="300px">
+          <p>Pivotal Tracker Badge allows you to generate story status badges.</p>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 5%">
+        <div class="column">
+          <h4>Examples</h4>
+          <p>
+            The following list are a collection of stories, <em>releases</em>, <em>features</em>, <em>bugs</em> and <em>chores</em>, with their <em>id</em> and <em>current state</em>.
+          </p>
+          <img src="/story/show/137030781" />
+          <img src="/story/show/137030957" />
+          <img src="/story/show/137031197" />
+          <img src="/story/show/137031291" />
+          <img src="/story/show/137031345" />
+          <img src="/story/show/137031411" />
+          <img src="/story/show/137031459" />
+          <img src="/story/show/137031529" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 5%">
+        <div class="column">
+          <h4>Markdown Example</h4>
+          <p>
+            I use this to display Pivotal Tracker status' in Trello using markdown. To display the badge you can use this format to render a PT badge <img src="https://www.pivotaltrackerbadge.com/story/show/137030781" />
+            <br /><br />
+            <em>
+              ![https://www.pivotaltracker.com/story/show/137030781](https://www.pivotaltrackerbadge.com/story/show/137030781)
+            </em>
+          </p>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 5%">
+        <div class="one-half column">
+          <h4>Use</h4>
+          <p>
+            To use you can either use our service <a href="https://www.pivotaltrackerbadge.com/">pivotaltrackerbadge.com</a> by registering or deploy your own by folloying the guides at <a href="https://github.com/jrschumacher/pivotal-tracker-badge">github.com/jrschumacher/pivotal-tracker-badge</a>.
+          </p>
+        </div>
+        <div class="one-half column">
+          <h4>Register</h4>
+          <form id="frm-register">
+            <label for="frm-register-key">Pivotal Tracker API Key</label>
+            <input type="text" name="key" placeholder="Pivotal Tracker API Key" class="u-full-width" id="frm-register-key" />
+            <div id="frm-register-msg" style="float:right;"></div>
+            <input type="submit" value="Register" onclick="window.registerApp" />
+          </form>
+          <p>
+            <small>
+              To unregister your key please send this curl command with your id:<br />
+              <strong>curl -X "DELETE" "http://pivotaltrackerbadge.com/register/YOUR_KEY_HERE"</strong>
+            </small>
+          </p>
+          <p>
+            <small>
+              <strong>Disclaimer:</strong> The API key is only used to fetch the story status, however your API keys are <em>not encrypted</em>. We use Heroku to host this service and Heroku Redis to host the database.
+              <br />
+              By using this service you understand that this is provided without warranty of any kind. Additonally you will not hold us liable for any damages you might be cause by using this service.
+            </small>
+          </p>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <div class="column">
+          <p>
+            <small>
+              Presented by <a href="http://tep.io/" style="position:relative;top:8px;"><img src="http://tep.io//wp-content/uploads/2016/09/tepio-logo.png" width="50px"/></a>
+              Copyright 2017 Ryan Schumacher. <a href="https://opensource.org/licenses/MIT">MIT Licensed</a>.
+              Additonal credits and copyrights to <a href="http://shields.io/">shields.io</a> and <a href="https://github.com/jrschumacher/pivotal-tracker-badge/blob/master/package.json">and these</a>.
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+      (function() {
+        var form = document.getElementById('frm-register');
+
+        function processForm(e) {
+          e.preventDefault();
+          var key = document.getElementById('frm-register-key').value;
+          document.getElementById('frm-register-msg').style.display = 'none';
+          document.getElementById('frm-register-msg').innerHTML = '';
+          if(key === "") {
+            document.getElementById('frm-register-msg').style.display = 'block';
+            return document.getElementById('frm-register-msg').innerHTML = '<strong style="color:red;">Key is required</strong>';
+          }
+
+          axios.post('/register', {
+            key: key
+          })
+            .then(function (response) {
+              var id = response.data;
+              document.getElementById('frm-register-msg').style.display = 'block';
+              document.getElementById('frm-register-msg').innerHTML = '<small>Your key <strong>'+id+'</strong></small>';
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        };
+
+        if(form.attachEvent) form.attachEvent('submit', processForm);
+        else form.addEventListener('submit', processForm);
+      })();
+    </script>
+
+  </body>
+</html>
