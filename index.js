@@ -84,7 +84,6 @@ function registerApp(req, res) {
   let key = req.body.key;
   if(!key) res.status(400).send('Key is required')
   else {
-    // search db for key
     db.setKey(key, function(id) {
       res.status(201).send(id);
     });
