@@ -1,4 +1,4 @@
-'use script';
+"use strict";
 
 const badge = require('gh-badges');
 const BADGE_FONT = './Verdana.ttf';
@@ -13,17 +13,17 @@ let Badge = function Badge() {
 Badge.prototype.setText = function(textA, textB) {
   this.text = [textA, textB];
   return this;
-}
+};
 
 Badge.prototype.setColorscheme = function(colorscheme) {
   this.colorscheme = colorscheme;
   return this;
-}
+};
 
 Badge.prototype.setTemplate = function(template) {
   this.template = template;
   return this;
-}
+};
 
 Badge.prototype.getOpts = function() {
   return {
@@ -32,7 +32,7 @@ Badge.prototype.getOpts = function() {
     logo: PT_LOGO,
     template: this.template
   };
-}
+};
 
 Badge.prototype.build = function(cb) {
   let scope = this;

@@ -20,6 +20,9 @@ else if(!process.env.PIVOTAL_API_KEY) {
 
 
 function getStoryBadge(req, res) {
+  res.append('Cache-Control', 'no-cache, no-store, must-revalidate');
+  //Past expiration forces re-fetching images each time.
+  res.append('Expires', 'Wed, 21 Oct 2015 07:28:00 GMT');
   const UUID = req.params.uuid || null;
   db.getKey(req.params.uuid, function(key) {
     const storyId = req.params.storyId;
